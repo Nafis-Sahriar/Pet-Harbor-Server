@@ -18,11 +18,9 @@ const client = new MongoClient(uri, {
   }
 });
 
-
 app.get('/', (req, res) => {
     res.send('SERVER IS RUNNING');
 });
-
 
 async function run() {
   try {
@@ -118,6 +116,16 @@ app.get('/myRequests/:id', async(req, res) => {
     res.json(result);
 
 });
+
+// Ekhon amake individual user koyta pet list koreche, oi data dekhate hobe.
+// tahole ami jodi ekta api banai, pet list korar jonno, ar query parameter hishebe user id dei, tahole oi user
+// koyta pet list koreche, eta dekhte parbo. ok fine, then, abar oi pet card er moddhe button thakbe , details dekhanor, eta ami id pass kore
+// details page theke dekhiye dite parbo. ok fine, Then arekta buttont hakbe , delete er, list theke delete er, tahole delete method call kore dilei hobe. 
+// then abar arekta button thakbe edit er, tw oita edit optionroute e pathiye dibo. 
+// last ekta button thakbe show requests. ekhane amar pet wise all request dekhate hobe, tw tokhon ekta api call korbo, ar query parameter hishebe
+// pet id pass kore dibo, then request collection theke oi pet er joto requests ache, oigula dekhiye dibo. In sha Allah. 
+
+
 
    
       
