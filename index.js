@@ -127,7 +127,15 @@ app.get('/myRequests/:id', async(req, res) => {
 
 
 
-   
+   // first, Show the pet listing, 
+
+  app.get('/allPetOfOwner/:ownerId', async (req, res)=>{
+
+    const ownerId = req.params.ownerId;
+    const result = await allPetCollection.find({ownerId: ownerId}).toArray();
+    res.json(result);
+
+  } )
       
 
 
