@@ -1,5 +1,5 @@
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const dotenv = require('dotenv');
 dotenv.config();
 const uri = process.env.MONGO_DB_URI;
@@ -32,6 +32,7 @@ async function run() {
     const db = client.db('a09db');
 
     const allPetCollection = db.collection('allPets');
+    const adoptionRequestCollection = db.collection('adoptionRequests');
     
     // Here I will implement a post api to add pet in the database, which can only be added by users. No hardcoded json data will be stored in my db.
 
@@ -39,6 +40,14 @@ async function run() {
 
       const petData = req.body;
       const result = await allPetCollection.insertOne(petData);
+      res.json(result);
+
+    })
+
+    app.post('/adoptionRequest', async(req,res)=>{
+
+      const requestData = req.body;
+      const result = await adoptionRequestCollection.insertOne(requestData);
       res.json(result);
 
     })
@@ -61,6 +70,62 @@ async function run() {
             res.json(result);
 
     });
+
+    app.get('/allPets/:id', async(req, res) => 
+    {
+    const id = req.params.id;
+
+    const query = {
+        _id: new ObjectId(id)
+    };
+    const result = await allPetCollection.findOne(query);
+
+    res.json(result);
+
+});
+
+
+    // now I will implement a get api to render the request status
+    // implementing Query parameter to check the request status.
+
+  app.get('/adoptionRequest/check', async(req,res)=>{
+
+   const petId = req.query.petId;
+   const requesterId = req.query.requesterId;
+
+   const query = 
+   {
+      petId: petId,
+      requesterId: requesterId
+   };
+
+   const result = await adoptionRequestCollection.findOne(query);
+   res.json(result);
+
+})
+
+
+
+app.get('/myRequests/:id', async(req, res) => {
+
+    const id = req.params.id;
+
+    const query = {
+      requesterId: id
+    };
+
+    const result = await adoptionRequestCollection.find(query).toArray();
+    res.json(result);
+
+});
+
+   
+      
+
+
+   
+
+
 
   
     await client.db("admin").command({ ping: 1 });
