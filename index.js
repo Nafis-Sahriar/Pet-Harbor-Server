@@ -1,3 +1,4 @@
+const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -6,7 +7,8 @@ const uri = process.env.MONGO_DB_URI;
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 6000;
-
+app.use(cors());
+app.use(express.json());  
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -21,13 +23,28 @@ app.get('/', (req, res) => {
     res.send('SERVER IS RUNNING');
 });
 
+
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
+ 
     await client.connect();
 
+    const db = client.db('a09db');
+
+    const allPetCollection = db.collection('allPets');
     
-    // Send a ping to confirm a successful connection
+    // Here I will implement a post api to add pet in the database, which can only be added by users. No hardcoded json data will be stored in my db.
+
+    app.post('/addPet', async(req,res)=>{
+
+      const petData = req.body;
+      const result = await allPetCollection.insertOne(petData);
+      res.json(result);
+
+    })
+
+    
+   
     await client.db("admin").command({ ping: 1 });
 
 
