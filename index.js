@@ -50,6 +50,20 @@ async function run() {
 
     })
 
+    app.delete('/deleteRequest/:id', async(req,res) => {
+
+      const id = req.params.id;
+
+      const query = {
+
+        _id: new ObjectId(id)
+
+      };
+      
+      const result = await adoptionRequestCollection.deleteOne(query);
+      res.json(result);
+    })
+
     // Here I will implement a get api to get all the pets from the database, which can be accessed by users.
 
     app.get('/allPets', async(req,res)=>{
@@ -60,7 +74,7 @@ async function run() {
     // I will delete a pet here, 
     app.delete('/deletePet/:id', async (req, res)=>{
       const id = req.params.id;
-      
+
       const query = {
 
         _id: new ObjectId(id)
