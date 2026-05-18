@@ -43,8 +43,26 @@ async function run() {
 
     })
 
-    
-   
+    // Here I will implement a get api to get all the pets from the database, which can be accessed by users.
+
+    app.get('/allPets', async(req,res)=>{
+      const result = await allPetCollection.find().toArray();
+      res.json(result);
+    })
+
+    app.get('/featuredPets', async(req, res) => 
+    {
+           const result = await allPetCollection.find(
+            {
+              adoptionStatus: "available"
+            }
+            ).limit(6).toArray();
+
+            res.json(result);
+
+    });
+
+  
     await client.db("admin").command({ ping: 1 });
 
 
