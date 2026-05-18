@@ -57,6 +57,19 @@ async function run() {
       res.json(result);
     })
 
+    // I will delete a pet here, 
+    app.delete('/deletePet/:id', async (req, res)=>{
+      const id = req.params.id;
+      
+      const query = {
+
+        _id: new ObjectId(id)
+      };
+
+      const result = await allPetCollection.deleteOne(query);
+      res.json(result);
+    })
+
     app.get('/featuredPets', async(req, res) => 
     {
            const result = await allPetCollection.find(
