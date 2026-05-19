@@ -31,6 +31,7 @@ async function run() {
 
     const allPetCollection = db.collection('allPets');
     const adoptionRequestCollection = db.collection('adoptionRequests');
+    const wishListCollection = db.collection('wishlist');
     
     // Here I will implement a post api to add pet in the database, which can only be added by users. No hardcoded json data will be stored in my db.
 
@@ -270,6 +271,33 @@ app.get('/myRequests/:id', async(req, res) => {
     res.json(result);
 
   } )
+
+
+  // wishLIst er jonno api banate hobe. 
+
+  app.post('/addToWishlist', async (req, res)=>{
+
+       const wishListData = req.body;
+
+       // already ache kina check korte hobe.
+
+       const alreadyAche = await wishListCollection.findOne({
+        petId:wishListData.petId,
+        userId: wishListData.userId
+       })
+
+       if(alreadyAche)
+       {
+           return res.json({
+            message:"Already in WishList!"
+           })
+       }
+
+       const result = await wishListCollection.insertOne(wishListData);
+
+      return res.json(result);
+
+  })
       
 
 
