@@ -50,6 +50,18 @@ async function run() {
 
     })
 
+    // Ekta get API lagbe , pet id niye oi pet er sob request dekhanor jonno.
+
+    app.get('/requestsOfPet/:petId', async(req,res) => {
+
+      const petId = req.params.petId;
+      const query = {
+        petId: petId
+      };
+      const result = await adoptionRequestCollection.find(query).toArray();
+      res.json(result);
+    });
+
     app.delete('/deleteRequest/:id', async(req,res) => {
 
       const id = req.params.id;
