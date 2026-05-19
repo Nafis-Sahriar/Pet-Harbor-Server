@@ -298,6 +298,33 @@ app.get('/myRequests/:id', async(req, res) => {
       return res.json(result);
 
   })
+
+
+  app.get('/wishList/:id', async(req, res)=>{
+
+        const userId = req.params.id;
+
+        const query={
+             userId:userId
+        }
+
+        const result = await wishListCollection.find(query).toArray();
+
+        return res.json(result);
+
+  })
+
+  app.delete('/removeFromWishList/:id', async(req,res)=>{
+
+        const id = req.params.id;
+        
+        const result = await wishListCollection.deleteOne({
+          _id: new ObjectId(id)
+        })
+
+      return res.json(result);
+
+  })
       
 
 
