@@ -127,6 +127,27 @@ async function run() {
      
     });
 
+    // Ebar reject api banate hobe. 
+    app.patch('/rejectRequest/:id', async(req,res)=>{
+
+            const id = req.params.id;
+
+            const _id= new ObjectId(id);
+
+            const result = await adoptionRequestCollection.updateOne(
+              {
+                _id
+              },
+              {
+                 $set:{
+                  requestStatus:'rejected'
+                 }
+              }
+            );
+
+            return res.json(result);
+    })
+
 
     // Here I will implement a get api to get all the pets from the database, which can be accessed by users.
 
