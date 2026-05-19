@@ -214,7 +214,7 @@ async function run() {
 
 
     // Update pet details API 
-    app.patch('/updatePet/:id', async(req,res) => {
+    app.patch('/updatePet/:id',jwtVerifyToken, async(req,res) => {
 
       const id = req.params.id;
       const updatedData = req.body;
