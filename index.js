@@ -5,6 +5,7 @@ dotenv.config();
 const uri = process.env.MONGO_DB_URI;
 
 const express = require('express');
+const { createRemoteJWKSet, jwtVerify } = require('jose-cjs');
 const app = express();
 const PORT = process.env.PORT || 6000;
 app.use(cors());
@@ -21,6 +22,47 @@ const client = new MongoClient(uri, {
 app.get('/', (req, res) => {
     res.send('SERVER IS RUNNING');
 });
+
+const JWKS = createRemoteJWKSet(
+  new URL("http://localhost:3000/api/auth/jwks")
+)
+
+const jwtVerifyToken = async (req,res,next)=>
+{
+     
+
+      const authHeader = req?.headers.authorization
+
+      if(!authHeader)
+      {
+        return  res.status(401).json({
+          message:"Unauthorized"
+        })
+      }
+
+      const token = authHeader.split(" ")[1]
+      if(!token)
+      {
+        return res.status(401).json({
+          message:"Unauthorized"
+        })
+      }
+
+      try{
+        const {payload} = await jwtVerify(token, JWKS)
+        next()
+        // console.log(payload)
+      }
+      catch(error)
+      {
+        return res.status(403).json({
+          message:"Forbidden"
+        });
+      }
+
+      // console.log(token)
+      
+}
 
 async function run() {
   try {
@@ -204,7 +246,7 @@ async function run() {
 
     });
 
-    app.get('/allPets/:id', async(req, res) => 
+    app.get('/allPets/:id', jwtVerifyToken ,async(req, res) => 
     {
     const id = req.params.id;
 
@@ -317,7 +359,7 @@ app.get('/myRequests/:id', async(req, res) => {
   app.delete('/removeFromWishList/:id', async(req,res)=>{
 
         const id = req.params.id;
-        
+
         const result = await wishListCollection.deleteOne({
           _id: new ObjectId(id)
         })
