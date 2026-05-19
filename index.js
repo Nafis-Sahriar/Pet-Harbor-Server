@@ -76,6 +76,58 @@ async function run() {
       res.json(result);
     })
 
+
+    //Ebar ekta api banate hobe , accept action handle korar jonno, ekhane ami first of all, 
+    // all request theke request id diye particular request ta ene oitar status accepted kore dbo, 
+    // then oi request er pet id niye, all pet collection e giye oi pet er adoption status ta available theke adopted kore dbo.
+
+
+
+    app.patch('/acceptRequest/:id', async(req,res) => {
+
+            const id = req.params.id;
+            const {petId} = req.body;
+
+            const query ={_id: new ObjectId(id)};
+
+            await adoptionRequestCollection.updateOne(
+              query,     
+            {
+              $set:{
+                requestStatus:"accepted"
+              }
+            });
+
+            await adoptionRequestCollection.updateMany(
+              {
+                petId:petId,
+                _id:{$ne: new ObjectId(id)}
+              },
+              {
+                $set:{
+                  requestStatus:"rejected"
+                }
+              }
+
+            )
+
+            await allPetCollection.updateOne(
+              {
+                  _id: new ObjectId(petId)
+              },
+              {
+                $set:{
+                  adoptionStatus: "adopted"
+                }
+              }
+            )
+
+        return res.json({message: "Request accepted Succesfuly"});
+
+     
+    });
+
+
     // Here I will implement a get api to get all the pets from the database, which can be accessed by users.
 
     app.get('/allPets', async(req,res)=>{
