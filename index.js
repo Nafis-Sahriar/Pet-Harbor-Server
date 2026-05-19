@@ -77,7 +77,7 @@ async function run() {
     
     // Here I will implement a post api to add pet in the database, which can only be added by users. No hardcoded json data will be stored in my db.
 
-    app.post('/addPet', async(req,res)=>{
+    app.post('/addPet',jwtVerifyToken, async(req,res)=>{
 
       const petData = req.body;
       const result = await allPetCollection.insertOne(petData);
