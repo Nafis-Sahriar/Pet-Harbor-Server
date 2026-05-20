@@ -200,7 +200,7 @@ async function run() {
     })
 
     // I will delete a pet here, 
-    app.delete('/deletePet/:id', async (req, res)=>{
+    app.delete('/deletePet/:id',jwtVerifyToken, async (req, res)=>{
       const id = req.params.id;
 
       const query = {
