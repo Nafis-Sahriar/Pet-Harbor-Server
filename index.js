@@ -281,7 +281,7 @@ async function run() {
 
 
 
-app.get('/myRequests/:id', async(req, res) => {
+app.get('/myRequests/:id',jwtVerifyToken, async(req, res) => {
 
     const id = req.params.id;
 
