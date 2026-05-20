@@ -85,7 +85,7 @@ async function run() {
 
     })
 
-    app.post('/adoptionRequest', async(req,res)=>{
+    app.post('/adoptionRequest',jwtVerifyToken, async(req,res)=>{
 
       const requestData = req.body;
       const result = await adoptionRequestCollection.insertOne(requestData);
@@ -306,7 +306,7 @@ app.get('/myRequests/:id', async(req, res) => {
 
    // first, Show the pet listing, 
 
-  app.get('/allPetOfOwner/:ownerId', async (req, res)=>{
+  app.get('/allPetOfOwner/:ownerId',jwtVerifyToken, async (req, res)=>{
 
     const ownerId = req.params.ownerId;
     const result = await allPetCollection.find({ownerId: ownerId}).toArray();
