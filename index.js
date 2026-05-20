@@ -317,7 +317,7 @@ app.get('/myRequests/:id',jwtVerifyToken, async(req, res) => {
 
   // wishLIst er jonno api banate hobe. 
 
-  app.post('/addToWishlist', async (req, res)=>{
+  app.post('/addToWishlist',jwtVerifyToken, async (req, res)=>{
 
        const wishListData = req.body;
 
@@ -356,7 +356,7 @@ app.get('/myRequests/:id',jwtVerifyToken, async(req, res) => {
 
   })
 
-  app.delete('/removeFromWishList/:id', async(req,res)=>{
+  app.delete('/removeFromWishList/:id',jwtVerifyToken, async(req,res)=>{
 
         const id = req.params.id;
 
