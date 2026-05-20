@@ -342,7 +342,7 @@ app.get('/myRequests/:id',jwtVerifyToken, async(req, res) => {
   })
 
 
-  app.get('/wishList/:id', async(req, res)=>{
+  app.get('/wishList/:id',jwtVerifyToken, async(req, res)=>{
 
         const userId = req.params.id;
 
