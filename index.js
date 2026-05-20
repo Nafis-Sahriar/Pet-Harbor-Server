@@ -95,7 +95,7 @@ async function run() {
 
     // Ekta get API lagbe , pet id niye oi pet er sob request dekhanor jonno.
 
-    app.get('/requestsOfPet/:petId', async(req,res) => {
+    app.get('/requestsOfPet/:petId',jwtVerifyToken, async(req,res) => {
 
       const petId = req.params.petId;
       const query = {
@@ -193,7 +193,7 @@ async function run() {
 
 
     // Here I will implement a get api to get all the pets from the database, which can be accessed by users.
-
+    // a non user can also see my all pets, thats why i should not jwt verify this.
     app.get('/allPets', async(req,res)=>{
       const result = await allPetCollection.find().toArray();
       res.json(result);
