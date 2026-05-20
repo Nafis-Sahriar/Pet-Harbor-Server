@@ -126,7 +126,7 @@ async function run() {
 
 
 
-    app.patch('/acceptRequest/:id', async(req,res) => {
+    app.patch('/acceptRequest/:id',jwtVerifyToken, async(req,res) => {
 
             const id = req.params.id;
             const {petId} = req.body;
@@ -171,7 +171,7 @@ async function run() {
     });
 
     // Ebar reject api banate hobe. 
-    app.patch('/rejectRequest/:id', async(req,res)=>{
+    app.patch('/rejectRequest/:id',jwtVerifyToken, async(req,res)=>{
 
             const id = req.params.id;
 
