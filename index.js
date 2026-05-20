@@ -1,5 +1,5 @@
 const cors = require('cors');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId, MongoOperationTimeoutError } = require('mongodb');
 const dotenv = require('dotenv');
 dotenv.config();
 const uri = process.env.MONGO_DB_URI;
@@ -195,8 +195,48 @@ async function run() {
     // Here I will implement a get api to get all the pets from the database, which can be accessed by users.
     // a non user can also see my all pets, thats why i should not jwt verify this.
     app.get('/allPets', async(req,res)=>{
-      const result = await allPetCollection.find().toArray();
+
+       
+      const {search} = req.query;
+
+      let cursor;
+
+      if(search)
+      {
+        // jodi search thake, 
+        cursor = await allPetCollection.find({
+         $or:[
+                            {
+                              // first , pet name diye, 
+
+                              petName:{
+                                    $regex:search,
+                                    $options:'i'
+                              }
+                            },
+
+                            // {
+                            //   // breed diye
+                            //   breed:{
+                            //     $regex:search,
+                            //     $options:'i'
+                            //   }
+                            // }
+                            // breed apatoto bad dei, karon beshi card show kore fele.
+          
+         ]
+
+      })}
+
+      else
+      {
+        cursor = allPetCollection.find();
+      }
+
+      const result = await cursor.toArray();
+
       res.json(result);
+
     })
 
     // I will delete a pet here, 
