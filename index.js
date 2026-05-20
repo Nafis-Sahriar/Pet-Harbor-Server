@@ -263,7 +263,7 @@ async function run() {
     // now I will implement a get api to render the request status
     // implementing Query parameter to check the request status.
 
-  app.get('/adoptionRequest/check', async(req,res)=>{
+  app.get('/adoptionRequest/check',jwtVerifyToken, async(req,res)=>{
 
    const petId = req.query.petId;
    const requesterId = req.query.requesterId;
