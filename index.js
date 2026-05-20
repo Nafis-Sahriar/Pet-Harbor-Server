@@ -196,46 +196,62 @@ async function run() {
     // a non user can also see my all pets, thats why i should not jwt verify this.
     app.get('/allPets', async(req,res)=>{
 
-       
-      const {search} = req.query;
+      const { search, species } = req.query;
 
       let cursor;
+      // jokhon searrch + filter duitai ashbe tokhon ekta logic banate hobe.
+        if(search && species)
+        {
+           cursor = allPetCollection.find({
 
-      if(search)
-      {
-        // jodi search thake, 
-        cursor = await allPetCollection.find({
+           $or:[
+            {
+               petName:{
+                  $regex:search,
+                  $options:'i'
+               }
+            }
+          ],
+           species:{
+                $in:[species]
+              }
+         });
+
+       }
+       // jodi shudhu search hoy, tahole only search.
+       else if(search)
+       {
+         cursor = allPetCollection.find({
          $or:[
-                            {
-                              // first , pet name diye, 
-
-                              petName:{
-                                    $regex:search,
-                                    $options:'i'
-                              }
-                            },
-
-                            // {
-                            //   // breed diye
-                            //   breed:{
-                            //     $regex:search,
-                            //     $options:'i'
-                            //   }
-                            // }
-                            // breed apatoto bad dei, karon beshi card show kore fele.
-          
+            {
+               petName:{
+                  $regex:search,
+                  $options:'i'
+               }
+            }
          ]
+      });
+   }
 
-      })}
+   // jodi sudhu filter hoy, tahole arekta. alada.
+   else if(species)
+   {
+      cursor = allPetCollection.find({
+         species:{
+            $in:[species]
+         }
+      });
+   }
 
-      else
-      {
-        cursor = allPetCollection.find();
-      }
+   // ar ektao na hole just sob pathay dibo.
+   else
+   {
+      cursor = allPetCollection.find();
+   }
+   const result = await cursor.toArray();
 
-      const result = await cursor.toArray();
-
-      res.json(result);
+   res.json(result);
+      
 
     })
 
@@ -269,9 +285,6 @@ async function run() {
       );
       res.json(result);
     })
-
-
-
 
 
     app.get('/featuredPets', async(req, res) => 
