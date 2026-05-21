@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 });
 
 const JWKS = createRemoteJWKSet(
-  new URL("http://localhost:3000/api/auth/jwks")
+  new URL(`${process.env.CLIENT_URL}/api/auth/jwks`)
 )
 
 const jwtVerifyToken = async (req,res,next)=>
@@ -67,7 +67,7 @@ const jwtVerifyToken = async (req,res,next)=>
 async function run() {
   try {
  
-    await client.connect();
+    // await client.connect();
 
     const db = client.db('a09db');
 
@@ -422,13 +422,8 @@ app.get('/myRequests/:id',jwtVerifyToken, async(req, res) => {
   })
       
 
-
-   
-
-
-
   
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
 
 
 
