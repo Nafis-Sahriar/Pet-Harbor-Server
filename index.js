@@ -255,6 +255,17 @@ async function run() {
 
     })
 
+    // Have to get the request for ownerID
+    app.get('/requestsOfOwner/:ownerId',jwtVerifyToken, async(req,res) => {
+
+      const ownerId = req.params.ownerId;
+      const query = {
+        ownerId: ownerId
+      };
+      const result = await adoptionRequestCollection.find(query).toArray();
+      res.json(result);
+    });
+
     // I will delete a pet here, 
     app.delete('/deletePet/:id',jwtVerifyToken, async (req, res)=>{
       const id = req.params.id;
